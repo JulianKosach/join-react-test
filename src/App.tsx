@@ -24,7 +24,7 @@ function App() {
             <Route path="/candidates" exact component={CandidatesScreen} />
             <Redirect path="*" to="/" />
           </Switch>
-        </div> 
+        </div>
     </BrowserRouter>
   );
 }

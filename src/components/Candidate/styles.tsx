@@ -36,6 +36,15 @@ export const useStyles = makeStyles((theme: any) => ({
     top: 0,
     left: 0,
   },
+  ProgressCircleError: {
+    stroke: '#d96865'
+  },
+  ProgressCircleWarning: {
+    stroke: '#f09451'
+  },
+  ProgressCircleOk: {
+    stroke: theme.palette.primary.main
+  },
   ProgressValue: {
     position: 'absolute',
     top: '50%',

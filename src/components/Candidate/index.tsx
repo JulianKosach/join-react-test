@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -15,14 +15,15 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { useStyles } from './styles';
 
 import Candidate from 'types/Candidate';
-
 type Props = {
   candidate: Candidate;
 };
 
 const CandidateView = ({ candidate }: Props) => {
   const S = useStyles();
-  const { fullName, email, avatar, state, appliedOn } = candidate;
+  const { fullName, email, avatar, state, appliedOn, score = {} } = candidate;
+  const { scorePercentage = 0, scoreTitle = '', scoreColor = '' } = score;
+  const [progressCircleClass, setProgressCircleClass] = useState(S.ProgressCircleError);
 
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const handleOpenMenu = (event: any) => {
@@ -39,6 +40,16 @@ const CandidateView = ({ candidate }: Props) => {
   const handleDelete = () => {
     handleCloseMenu();
   };
+
+  useEffect(() => {
+    if (scoreColor === 'error') {
+      setProgressCircleClass(S.ProgressCircleError);
+    } else if (scoreColor === 'warn') {
+      setProgressCircleClass(S.ProgressCircleWarning);
+    } else {
+      setProgressCircleClass(S.ProgressCircleOk);
+    }
+  }, [scoreColor, S]);
 
   return (
     <Paper elevation={1} className={S.Candidate}>
@@ -68,11 +79,13 @@ const CandidateView = ({ candidate }: Props) => {
           <CircularProgress
             variant="static"
             size={60}
-            value={76}
+            value={scorePercentage}
             className={S.Progress}
+            classes={{ circle: progressCircleClass }}
+            color="inherit"
           />
           <Typography variant="subtitle1" className={S.ProgressValue}>
-            76%
+            {scorePercentage}%
           </Typography>
         </div>
         <div className={S.InfoCol}>
@@ -80,7 +93,7 @@ const CandidateView = ({ candidate }: Props) => {
             Application score
           </Typography>
           <Typography variant="h6" className={S.ScoreValue}>
-            Good
+            {scoreTitle}
           </Typography>
         </div>
       </div>

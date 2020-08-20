@@ -1,5 +1,6 @@
 import { observable, flow, configure, action, computed } from 'mobx';
 import apiService from 'services/api.service';
+import { getCandidateScore } from 'helpers/score.helper';
 
 configure({ enforceActions: 'observed' });
 
@@ -20,7 +21,11 @@ class CandidatesStore {
   fetchAllCandidates = flow(function* fetch(this: any) {
     this.loading = true;
     try {
-      const { data } = yield apiService.fetchCandidates();
+      let { data } = yield apiService.fetchCandidates();
+      data = data.map((item: any) => ({
+        ...item,
+        score: getCandidateScore(item)
+      }));
       this.candidates = data;
       this.errors = [];
       this.loading = false;

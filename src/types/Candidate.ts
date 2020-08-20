@@ -6,6 +6,7 @@ type Candidate = {
   avatar: string;
   appliedOn: string;
   state: string;
+  score: any;
 };
 
 export default Candidate;

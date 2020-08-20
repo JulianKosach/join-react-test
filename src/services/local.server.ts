@@ -33,7 +33,7 @@ class LocalServer {
     return new Promise((res, rej) => {
       try {
         const data = localStorage.getItem(`${DATABASE_KEY}${url}`) || '[]';
-        let arr = JSON.parse(data) || [];
+        const arr = JSON.parse(data) || [];
         const idx = arr.findIndex((item: any) => item.id === id);
         const item = arr[idx];
         if (idx !== -1) {

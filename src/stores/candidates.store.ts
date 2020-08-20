@@ -28,7 +28,7 @@ class CandidatesStore {
   fetchAllCandidates = flow(function* fetch(this: any) {
     this.loading = true;
     try {
-      let { data } = yield apiService.fetchCandidates();
+      const { data } = yield apiService.fetchCandidates();
       this.candidates = this.serializeCandidates(data);
       this.errors = [];
       this.loading = false;
@@ -42,7 +42,7 @@ class CandidatesStore {
   deleteCandidate = flow(function* fetch(this: any, id: string) {
     this.loading = true;
     try {
-      let { data } = yield apiService.deleteCandidate(id);
+      const { data } = yield apiService.deleteCandidate(id);
       this.candidates = this.serializeCandidates(data);
       this.errors = [];
       this.loading = false;

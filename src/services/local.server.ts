@@ -19,9 +19,29 @@ class LocalServer {
   get(url: string) {
     return new Promise((res, rej) => {
       try {
-        const data = localStorage.getItem(`${DATABASE_KEY}${url}`) || '';
+        const data = localStorage.getItem(`${DATABASE_KEY}${url}`) || '[]';
         imitateHttpResponseTimeout(() => {
           res({ data: JSON.parse(data) });
+        });
+      } catch (e) {
+        rej(e);
+      }
+    });
+  }
+
+  delete(url: string, id: string) {
+    return new Promise((res, rej) => {
+      try {
+        const data = localStorage.getItem(`${DATABASE_KEY}${url}`) || '[]';
+        let arr = JSON.parse(data) || [];
+        const idx = arr.findIndex((item: any) => item.id === id);
+        const item = arr[idx];
+        if (idx !== -1) {
+          arr.splice(idx, 1);
+        }
+        localStorage.setItem(`${DATABASE_KEY}${url}`, JSON.stringify(arr));
+        imitateHttpResponseTimeout(() => {
+          res({ data: arr, item });
         });
       } catch (e) {
         rej(e);

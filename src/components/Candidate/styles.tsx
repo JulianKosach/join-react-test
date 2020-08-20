@@ -65,7 +65,23 @@ export const useStyles = makeStyles((theme: any) => ({
     alignItems: 'flex-end'
   },
   State: {
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
+    color: theme.palette.secondary.main,
+  },
+  StateHired: {
+    textTransform: 'uppercase',
+    color: '#128d25',
+    fontWeight: 'bold'
+  },
+  StateRejected: {
+    textTransform: 'uppercase',
+    color: '#d96865',
+    fontWeight: 'bold'
+  },
+  StateProgress: {
+    textTransform: 'uppercase',
+    color: theme.palette.primary.main,
+    fontWeight: 'bold'
   },
   AppliedOnRow: {
     marginTop: 10,

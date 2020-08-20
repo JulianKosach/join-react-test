@@ -1,31 +1,40 @@
-[{
-	"fullName": "Ruby Banks",
-	"email": "ruby.banks@example.com",
-	"password": "123123",
-	"phone": "+491231122890",
-	"avatar": "https://randomuser.me/api/portraits/women/13.jpg",
-	"appliedOn": "01.04.2020",
-	"state": "submitted"
-}, {
-	"fullName": "Lester Morrison",
-	"email": "lester.morrison@example.com",
-	"password": "",
-	"phone": "+491231122890",
-	"avatar": "",
-	"appliedOn": "05.03.2020",
-	"state": "in review"
-}, {
-	"fullName": "Darren Reid",
-	"email": "darren.reid@example.com",
-	"password": "0w39rj",
-	"avatar": "https://randomuser.me/ap/portraits/men/45.jpg",
-	"appliedOn": "20.04.2020",
-	"state": "submitted"
-}, {
-	"fullName": "Sara Griffin",
-	"email": "sara.griffin@example.com",
-	"phone": "+34633383774",
-	"avatar": "https://randomuser.me/api/portraits/women/50.jpg",
-	"appliedOn": "04.04.2019",
-	"state": "not a fit"
-}]
+[
+  {
+    "id": "candidate1",
+    "fullName": "Ruby Banks",
+    "email": "ruby.banks@example.com",
+    "password": "123123",
+    "phone": "+491231122890",
+    "avatar": "https://randomuser.me/api/portraits/women/13.jpg",
+    "appliedOn": "01.04.2020",
+    "state": "submitted"
+  },
+  {
+    "id": "candidate2",
+    "fullName": "Lester Morrison",
+    "email": "lester.morrison@example.com",
+    "password": "",
+    "phone": "+491231122890",
+    "avatar": "",
+    "appliedOn": "05.03.2020",
+    "state": "in review"
+  },
+  {
+    "id": "candidate3",
+    "fullName": "Darren Reid",
+    "email": "darren.reid@example.com",
+    "password": "0w39rj",
+    "avatar": "https://randomuser.me/ap/portraits/men/45.jpg",
+    "appliedOn": "20.04.2020",
+    "state": "submitted"
+  },
+  {
+    "id": "candidate4",
+    "fullName": "Sara Griffin",
+    "email": "sara.griffin@example.com",
+    "phone": "+34633383774",
+    "avatar": "https://randomuser.me/api/portraits/women/50.jpg",
+    "appliedOn": "04.04.2019",
+    "state": "not a fit"
+  }
+]

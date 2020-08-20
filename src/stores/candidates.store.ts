@@ -18,15 +18,32 @@ class CandidatesStore {
     this.loading = loading;
   }
 
+  serializeCandidates(candidates: any[]) {
+    return candidates.map((item: any) => ({
+      ...item,
+      score: getCandidateScore(item)
+    }));
+  }
+
   fetchAllCandidates = flow(function* fetch(this: any) {
     this.loading = true;
     try {
       let { data } = yield apiService.fetchCandidates();
-      data = data.map((item: any) => ({
-        ...item,
-        score: getCandidateScore(item)
-      }));
-      this.candidates = data;
+      this.candidates = this.serializeCandidates(data);
+      this.errors = [];
+      this.loading = false;
+      return data;
+    } catch (error) {
+      this.errors = error.errors;
+      this.loading = false;
+    }
+  })
+
+  deleteCandidate = flow(function* fetch(this: any, id: string) {
+    this.loading = true;
+    try {
+      let { data } = yield apiService.deleteCandidate(id);
+      this.candidates = this.serializeCandidates(data);
       this.errors = [];
       this.loading = false;
       return data;

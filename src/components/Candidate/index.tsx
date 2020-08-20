@@ -12,6 +12,8 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import SettingsIcon from '@material-ui/icons/Settings';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import stores from 'stores';
+
 import { useStyles } from './styles';
 
 import Candidate from 'types/Candidate';
@@ -21,9 +23,11 @@ type Props = {
 
 const CandidateView = ({ candidate }: Props) => {
   const S = useStyles();
-  const { fullName, email, avatar, state, appliedOn, score = {} } = candidate;
+  const { candidatesStore } = stores;
+  const { id, fullName, email, avatar, state, appliedOn, score = {} } = candidate;
   const { scorePercentage = 0, scoreTitle = '', scoreColor = '' } = score;
   const [progressCircleClass, setProgressCircleClass] = useState(S.ProgressCircleError);
+  const [stateClass, setStateClass] = useState(S.State);
 
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const handleOpenMenu = (event: any) => {
@@ -39,6 +43,7 @@ const CandidateView = ({ candidate }: Props) => {
 
   const handleDelete = () => {
     handleCloseMenu();
+    candidatesStore.deleteCandidate(id);
   };
 
   useEffect(() => {
@@ -50,6 +55,18 @@ const CandidateView = ({ candidate }: Props) => {
       setProgressCircleClass(S.ProgressCircleOk);
     }
   }, [scoreColor, S]);
+
+  useEffect(() => {
+    if (state === 'hired') {
+      setStateClass(S.StateHired);
+    } else if (state === 'not a fit') {
+      setStateClass(S.StateRejected);
+    } else if (state === 'in review') {
+      setStateClass(S.StateProgress);
+    } else {
+      setStateClass(S.State);
+    }
+  }, [state, S]);
 
   return (
     <Paper elevation={1} className={S.Candidate}>
@@ -100,7 +117,7 @@ const CandidateView = ({ candidate }: Props) => {
 
       <div className={S.DataCol} style={{ flex: 1, justifyContent: 'flex-end' }}>
         <div className={S.StateBlock}>
-          <Chip label={state} className={S.State} />
+          <Chip label={state} className={stateClass} />
           <div className={S.AppliedOnRow}>
             <Typography variant="body1" className={S.AppliedOnLabel}>
               Applied on

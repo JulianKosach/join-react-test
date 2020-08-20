@@ -1,4 +1,5 @@
 type Candidate = {
+  id: string,
   fullName: string;
   email: string;
   password: string;

@@ -26,9 +26,12 @@ const CandidatesScreen = () => {
       </p>
 
       <div className={S.CandidatesList}>
-        {candidates.map(candidate => (
-          <Candidate key={candidate.email} candidate={candidate} />
-        ))}
+        {candidates.length ?
+          candidates.map(candidate => (
+            <Candidate key={candidate.id} candidate={candidate} />
+          ))
+        :
+        <p>Nothing to show</p>}
       </div>
 
       {loading && <Preloader />}

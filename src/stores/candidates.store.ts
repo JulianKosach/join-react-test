@@ -1,4 +1,4 @@
-import { observable, flow, configure, action, computed } from 'mobx';
+import { observable, flow, configure, action, computed, set } from 'mobx';
 import apiService from 'services/api.service';
 import { getCandidateScore } from 'helpers/score.helper';
 
@@ -39,14 +39,33 @@ class CandidatesStore {
     }
   })
 
-  deleteCandidate = flow(function* fetch(this: any, id: string) {
+  updateCandidate = flow(function* fetch(this: any, id: string, data: any) {
     this.loading = true;
     try {
-      const { data } = yield apiService.deleteCandidate(id);
-      this.candidates = this.serializeCandidates(data);
+      yield apiService.updateCandidate(id, data);
+      const idx = this.candidates.findIndex((candidate: any) => candidate.id === id);
+      if (idx !== -1) {
+        const item = this.candidates[idx];
+        set(this.candidates, idx, { ...item, ...data });
+      }
       this.errors = [];
       this.loading = false;
       return data;
+    } catch (error) {
+      this.errors = error.errors;
+      this.loading = false;
+    }
+  })
+
+  deleteCandidate = flow(function* fetch(this: any, id: string) {
+    this.loading = true;
+    try {
+      yield apiService.deleteCandidate(id);
+      const idx = this.candidates.findIndex((candidate: any) => candidate.id === id);
+      if (idx !== -1) this.candidates.splice(idx, 1);
+      this.errors = [];
+      this.loading = false;
+      return 
     } catch (error) {
       this.errors = error.errors;
       this.loading = false;

@@ -6,6 +6,11 @@ import Avatar from '@material-ui/core/Avatar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
@@ -13,6 +18,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import stores from 'stores';
+import { states } from 'helpers/state.helper';
 
 import { useStyles } from './styles';
 
@@ -28,6 +34,17 @@ const CandidateView = ({ candidate }: Props) => {
   const { scorePercentage = 0, scoreTitle = '', scoreColor = '' } = score;
   const [progressCircleClass, setProgressCircleClass] = useState(S.ProgressCircleError);
   const [stateClass, setStateClass] = useState(S.State);
+  const currentState = states.find(item => item.label === state);
+  const availableStates = states.filter(item => !(currentState && item.step !== currentState.step && item.step !== currentState.step + 1));
+
+  const [newState, setNewState] = useState(state);
+  const [showDialog, setShowDialog] = useState(false);
+  const handleOpenDialog = () => {
+    setShowDialog(true);
+  };
+  const handleCloseDialog = () => {
+    setShowDialog(false);
+  };
 
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const handleOpenMenu = (event: any) => {
@@ -39,11 +56,21 @@ const CandidateView = ({ candidate }: Props) => {
 
   const handleChangeState = () => {
     handleCloseMenu();
+    handleOpenDialog();
   };
 
   const handleDelete = () => {
     handleCloseMenu();
     candidatesStore.deleteCandidate(id);
+  };
+
+  const handleChangeNewState = (event: any) => {
+    setNewState(event.target.value);
+  };
+
+  const handleUpdateState = () => {
+    handleCloseDialog();
+    candidatesStore.updateCandidate(id, { state: newState });
   };
 
   useEffect(() => {
@@ -55,6 +82,10 @@ const CandidateView = ({ candidate }: Props) => {
       setProgressCircleClass(S.ProgressCircleOk);
     }
   }, [scoreColor, S]);
+
+  useEffect(() => {
+    setNewState(state);
+  }, [state]);
 
   useEffect(() => {
     if (state === 'hired') {
@@ -137,6 +168,7 @@ const CandidateView = ({ candidate }: Props) => {
         >
           <MoreHorizIcon />
         </Button>
+
         <Menu
           id="candidate-menu"
           anchorEl={menuAnchorEl}
@@ -153,6 +185,39 @@ const CandidateView = ({ candidate }: Props) => {
             Delete
           </MenuItem>
         </Menu>
+
+
+        <Dialog onClose={handleCloseDialog} aria-labelledby="state-change-dialog" open={showDialog}>
+          <DialogTitle id="state-change-dialog">
+            Change state
+          </DialogTitle>
+          <div className={S.DialogBody}>
+            <FormControl className={S.StateSelect}>
+              <InputLabel id="state-select-label">New State</InputLabel>
+              <Select
+                labelId="state-select-label"
+                id="state-select"
+                value={newState}
+                onChange={handleChangeNewState}
+              >
+                {availableStates.map(({ label }) => (
+                  <MenuItem key={label} value={label} className={S.StateSelectOption}>
+                    {label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={newState === state}
+              onClick={handleUpdateState}
+              className={S.DialogSaveBtn}
+            >
+              Update State
+            </Button>
+          </div>
+        </Dialog>
       </div>
     </Paper>
   );

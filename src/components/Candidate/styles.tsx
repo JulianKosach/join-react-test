@@ -106,5 +106,21 @@ export const useStyles = makeStyles((theme: any) => ({
     '& > svg': {
       marginRight: 5
     }
+  },
+
+  DialogBody: {
+    padding: '10px 30px 30px',
+    color: theme.palette.secondary.main,
+    minWidth: 280
+  },
+  StateSelect: {
+    width: '100%'
+  },
+  StateSelectOption: {
+    
+  },
+  DialogSaveBtn: {
+    width: '100%',
+    marginTop: 20
   }
 }));

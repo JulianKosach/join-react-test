@@ -1,25 +1,31 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+
+// components
+import Header from 'components/Header';
+
+// screens
+import HomeScreen from 'screens/HomeScreen';
+import ApplicantScreen from 'screens/ApplicantScreen';
+import CandidatesScreen from 'screens/CandidatesScreen';
+
+// styles
+import { useStyles } from 'AppStyles';
 
 function App() {
+  const S = useStyles();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Header />
+      <div className={S.Container}>
+        <Switch>
+          <Route path="/" exact component={HomeScreen} />
+          <Route path="/applicant" exact component={ApplicantScreen} />
+          <Route path="/candidates" exact component={CandidatesScreen} />
+          <Redirect path="*" to="/" />
+        </Switch>
+      </div>
+    </BrowserRouter>
   );
 }
 

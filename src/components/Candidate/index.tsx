@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
+
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Button from '@material-ui/core/Button';
+import Chip from '@material-ui/core/Chip';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import SettingsIcon from '@material-ui/icons/Settings';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import { useStyles } from './styles';
 
@@ -13,28 +22,107 @@ type Props = {
 
 const CandidateView = ({ candidate }: Props) => {
   const S = useStyles();
+  const { fullName, email, avatar, state, appliedOn } = candidate;
 
-  const { fullName, email, avatar } = candidate;
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+  const handleOpenMenu = (event: any) => {
+    setMenuAnchorEl(event.currentTarget);
+  };
+  const handleCloseMenu = () => {
+    setMenuAnchorEl(null);
+  };
+
+  const handleChangeState = () => {
+    handleCloseMenu();
+  };
+
+  const handleDelete = () => {
+    handleCloseMenu();
+  };
+
   return (
     <Paper elevation={1} className={S.Candidate}>
-      <div className={S.InfoCol}>
+      <div className={S.DataCol} style={{ flex: 2 }}>
         <Avatar alt={fullName} src={avatar} className={S.Avatar} />
-        <div>
+        <div className={S.InfoCol}>
           <Typography variant="h6">
             {fullName}
           </Typography>
           <Typography variant="subtitle1">
-            {email}
+            <a href={`mailto:${email}`}>
+              {email}
+            </a>
           </Typography>
         </div>
       </div>
 
-      <div className={S.DataCol}>
-
+      <div className={S.DataCol} style={{ flex: 1 }}>
+        <div className={S.ProgressWrap}>
+          <CircularProgress
+            variant="static"
+            size={60}
+            value={100} 
+            classes={{ circle: S.ProgressBgCircle }}
+            color="inherit"
+          />
+          <CircularProgress
+            variant="static"
+            size={60}
+            value={76}
+            className={S.Progress}
+          />
+          <Typography variant="subtitle1" className={S.ProgressValue}>
+            76%
+          </Typography>
+        </div>
+        <div className={S.InfoCol}>
+          <Typography variant="subtitle1" className={S.ScoreLabel}>
+            Application score
+          </Typography>
+          <Typography variant="h6" className={S.ScoreValue}>
+            Good
+          </Typography>
+        </div>
       </div>
 
-      <div className={S.DataCol}>
-
+      <div className={S.DataCol} style={{ flex: 1, justifyContent: 'flex-end' }}>
+        <div className={S.StateBlock}>
+          <Chip label={state} className={S.State} />
+          <div className={S.AppliedOnRow}>
+            <Typography variant="body1" className={S.AppliedOnLabel}>
+              Applied on
+            </Typography>
+            <Typography variant="subtitle1">
+              {appliedOn}
+            </Typography>
+          </div>
+        </div>
+        <Button 
+          size="small"
+          variant="outlined"
+          className={S.MenuBtn}
+          aria-controls="candidate-menu"
+          aria-haspopup="true"
+          onClick={handleOpenMenu}
+        >
+          <MoreHorizIcon />
+        </Button>
+        <Menu
+          id="candidate-menu"
+          anchorEl={menuAnchorEl}
+          keepMounted
+          open={Boolean(menuAnchorEl)}
+          onClose={handleCloseMenu}
+        >
+          <MenuItem onClick={handleChangeState} className={S.MenuItem}>
+            <SettingsIcon />
+            Change State
+          </MenuItem>
+          <MenuItem onClick={handleDelete} className={S.MenuItem}>
+            <DeleteIcon />
+            Delete
+          </MenuItem>
+        </Menu>
       </div>
     </Paper>
   );

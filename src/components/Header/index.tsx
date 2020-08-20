@@ -7,7 +7,7 @@ import { useStyles } from './styles';
 
 const navs = [
   { title: 'Home', link: '/', cypressId: 'header__home-link' },
-  { title: 'Apply yourselt', link: '/applicant', cypressId: 'header__applicant-link' },
+  { title: 'Apply yourself', link: '/applicant', cypressId: 'header__applicant-link' },
   { title: 'All Candidates', link: '/candidates', cypressId: 'header__candidates-link' },
 ]
 

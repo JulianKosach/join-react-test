@@ -4,7 +4,7 @@ type Candidate = {
   password: string;
   phone: string;
   avatar: string;
-  applied_on: string;
+  appliedOn: string;
   state: string;
 };
 

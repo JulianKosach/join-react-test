@@ -5,6 +5,10 @@ class ApiService {
     return localServer.get('/candidates');
   }
 
+  createCandidate(data: any) {
+    return localServer.post('/candidates', data);
+  }
+
   updateCandidate(id: string, data: any) {
     return localServer.patch('/candidates', id, data);
   }

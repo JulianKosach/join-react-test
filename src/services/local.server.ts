@@ -1,4 +1,5 @@
 import candidates from 'data/candidates.json';
+import moment from 'moment';
 
 const DATABASE_KEY = 'database';
 
@@ -19,9 +20,12 @@ class LocalServer {
   get(url: string) {
     return new Promise((res, rej) => {
       try {
-        const data = localStorage.getItem(`${DATABASE_KEY}${url}`) || '[]';
+        let data = localStorage.getItem(`${DATABASE_KEY}${url}`) || '[]';
+        data = JSON.parse(data).sort((a: any, b: any) => {
+          return moment(b.appliedOn, 'DD.MM.YYYY hh:mm a').valueOf() - moment(a.appliedOn, 'DD.MM.YYYY hh:mm a').valueOf()
+        });
         imitateHttpResponseTimeout(() => {
-          res({ data: JSON.parse(data) });
+          res({ data });
         });
       } catch (e) {
         rej(e);
@@ -29,16 +33,34 @@ class LocalServer {
     });
   }
 
-  patch(url: string, id: string, updatedFields: any) {
+  post(url: string, body: any) {
+    return new Promise((res, rej) => {
+      try {
+        const data = localStorage.getItem(`${DATABASE_KEY}${url}`) || '[]';
+        const arr = JSON.parse(data) || [];
+        const id = 'candidate_' + Math.random().toString(36).substr(2, 9);
+        const item = { ...body, id, state: 'submitted', appliedOn: moment.utc().format('DD.MM.YYYY, hh:mm a') };
+        arr.push(item);
+        localStorage.setItem(`${DATABASE_KEY}${url}`, JSON.stringify(arr));
+        imitateHttpResponseTimeout(() => {
+          res({ data: arr, item });
+        });
+      } catch (e) {
+        rej(e);
+      }
+    });
+  }
+
+  patch(url: string, id: string, body: any) {
     return new Promise((res, rej) => {
       try {
         const data = localStorage.getItem(`${DATABASE_KEY}${url}`) || '[]';
         const arr = JSON.parse(data) || [];
         const idx = arr.findIndex((item: any) => item.id === id);
-        const item = arr[idx];
+        let item = arr[idx];
         if (idx !== -1) {
-          const updatedItem = { ...item, ...updatedFields };
-          arr[idx] = updatedItem;
+          item = { ...item, ...body };
+          arr[idx] = item;
           localStorage.setItem(`${DATABASE_KEY}${url}`, JSON.stringify(arr));
         }
         imitateHttpResponseTimeout(() => {

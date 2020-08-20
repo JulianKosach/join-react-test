@@ -6,6 +6,7 @@ configure({ enforceActions: 'observed' });
 
 class CandidatesStore {
   @observable loading = false;
+  @observable newCandidate: any = {};
   @observable candidates: any[] = [];
   @observable errors: [] = [];
 
@@ -16,6 +17,16 @@ class CandidatesStore {
   @action.bound
   setLoading(loading: boolean) {
     this.loading = loading;
+  }
+
+  @action.bound
+  clearNewCandidate() {
+    this.newCandidate = {};
+  }
+
+  @action.bound
+  handleChangeNewCandidate({ field, value }: { field: string; value: any }) {
+    this.newCandidate[field] = value;
   }
 
   serializeCandidates(candidates: any[]) {
@@ -39,18 +50,34 @@ class CandidatesStore {
     }
   })
 
+  addNewCandidate = flow(function* fetch(this: any) {
+    this.loading = true;
+    try {
+      const { item } = yield apiService.createCandidate(this.newCandidate);
+      const [serialized] = this.serializeCandidates([item]);
+      this.candidates.push(serialized);
+      this.clearNewCandidate();
+      this.errors = [];
+      this.loading = false;
+      return item;
+    } catch (error) {
+      this.errors = error.errors;
+      this.loading = false;
+    }
+  })
+
   updateCandidate = flow(function* fetch(this: any, id: string, data: any) {
     this.loading = true;
     try {
-      yield apiService.updateCandidate(id, data);
+      const { item } = yield apiService.updateCandidate(id, data);
       const idx = this.candidates.findIndex((candidate: any) => candidate.id === id);
       if (idx !== -1) {
-        const item = this.candidates[idx];
-        set(this.candidates, idx, { ...item, ...data });
+        const [serialized] = this.serializeCandidates([item]);
+        set(this.candidates, idx, serialized);
       }
       this.errors = [];
       this.loading = false;
-      return data;
+      return item;
     } catch (error) {
       this.errors = error.errors;
       this.loading = false;
@@ -60,12 +87,12 @@ class CandidatesStore {
   deleteCandidate = flow(function* fetch(this: any, id: string) {
     this.loading = true;
     try {
-      yield apiService.deleteCandidate(id);
+      const { item } = yield apiService.deleteCandidate(id);
       const idx = this.candidates.findIndex((candidate: any) => candidate.id === id);
       if (idx !== -1) this.candidates.splice(idx, 1);
       this.errors = [];
       this.loading = false;
-      return 
+      return item;
     } catch (error) {
       this.errors = error.errors;
       this.loading = false;

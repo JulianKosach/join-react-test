@@ -16,6 +16,7 @@
     "clsx": "^1.1.1",
     "mobx": "^5.15.6",
     "mobx-react": "^6.2.5",
+    "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",

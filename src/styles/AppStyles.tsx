@@ -12,6 +12,7 @@ export const useAppStyles = makeStyles((theme: any) => ({
   },
   Screen: {
     minHeight: '100%',
-    padding: 30
+    padding: 30,
+    background: theme.palette.grey['100']
   }
 }));

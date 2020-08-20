@@ -10,21 +10,21 @@ import ApplicantScreen from 'screens/ApplicantScreen';
 import CandidatesScreen from 'screens/CandidatesScreen';
 
 // styles
-import { useStyles } from 'AppStyles';
+import { useAppStyles } from 'styles/AppStyles';
 
 function App() {
-  const S = useStyles();
+  const S = useAppStyles();
   return (
     <BrowserRouter>
-      <Header />
-      <div className={S.Container}>
-        <Switch>
-          <Route path="/" exact component={HomeScreen} />
-          <Route path="/applicant" exact component={ApplicantScreen} />
-          <Route path="/candidates" exact component={CandidatesScreen} />
-          <Redirect path="*" to="/" />
-        </Switch>
-      </div>
+        <Header />
+        <div className={S.Container}>
+          <Switch>
+            <Route path="/" exact component={HomeScreen} />
+            <Route path="/applicant" exact component={ApplicantScreen} />
+            <Route path="/candidates" exact component={CandidatesScreen} />
+            <Redirect path="*" to="/" />
+          </Switch>
+        </div> 
     </BrowserRouter>
   );
 }

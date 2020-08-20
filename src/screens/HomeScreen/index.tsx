@@ -30,6 +30,7 @@ const HomeScreen = () => {
         variant="contained"
         color="primary"
         onClick={() => redirectTo('/applicant')}
+        data-cy="home__applicant-link"
         className={S.ApplyButton}
       >
         Apply yourself
@@ -52,6 +53,7 @@ const HomeScreen = () => {
         size="large"
         variant="contained"
         color="secondary"
+        data-cy="home__candidates-link"
         onClick={() => redirectTo('/candidates')}
         className={S.ListButton}
       >

@@ -1,8 +1,22 @@
 
 import { makeStyles } from '@material-ui/styles';
 
-export const useStyles = makeStyles(() => ({
+export const useStyles = makeStyles((theme: any) => ({
   Candidate: {
-    padding: '10px 20px'
+    padding: 20,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    color: theme.palette.secondary.main
   },
+  InfoCol: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  Avatar: {
+    marginRight: 20
+  },
+  DataCol: {
+
+  }
 }));

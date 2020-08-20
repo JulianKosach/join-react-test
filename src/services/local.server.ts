@@ -5,7 +5,7 @@ const DATABASE_KEY = 'database';
 const imitateHttpResponseTimeout = (callback: () => any) => {
   setTimeout(() => {
     callback();
-  }, Math.round( Math.random() * 1000 ));
+  }, 300 + Math.round( Math.random() * 1000 ));
 };
 
 class LocalServer {

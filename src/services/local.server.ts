@@ -2,6 +2,7 @@ import candidates from 'data/candidates.json';
 import moment from 'moment';
 
 const DATABASE_KEY = 'database';
+const DATE_FORMAT = 'DD.MM.YYYY hh:mm:ss a';
 
 const imitateHttpResponseTimeout = (callback: () => any) => {
   setTimeout(() => {
@@ -22,7 +23,7 @@ class LocalServer {
       try {
         let data = localStorage.getItem(`${DATABASE_KEY}${url}`) || '[]';
         data = JSON.parse(data).sort((a: any, b: any) => {
-          return moment(b.appliedOn, 'DD.MM.YYYY hh:mm a').valueOf() - moment(a.appliedOn, 'DD.MM.YYYY hh:mm a').valueOf()
+          return moment(b.appliedOn, DATE_FORMAT).valueOf() - moment(a.appliedOn, DATE_FORMAT).valueOf();
         });
         imitateHttpResponseTimeout(() => {
           res({ data });
@@ -39,7 +40,7 @@ class LocalServer {
         const data = localStorage.getItem(`${DATABASE_KEY}${url}`) || '[]';
         const arr = JSON.parse(data) || [];
         const id = 'candidate_' + Math.random().toString(36).substr(2, 9);
-        const item = { ...body, id, state: 'submitted', appliedOn: moment.utc().format('DD.MM.YYYY, hh:mm a') };
+        const item = { ...body, id, state: 'submitted', appliedOn: moment.utc().format(DATE_FORMAT) };
         arr.push(item);
         localStorage.setItem(`${DATABASE_KEY}${url}`, JSON.stringify(arr));
         imitateHttpResponseTimeout(() => {

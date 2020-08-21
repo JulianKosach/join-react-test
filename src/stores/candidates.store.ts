@@ -1,13 +1,19 @@
-import { observable, flow, configure, action, computed, set } from 'mobx';
+import { observable, flow, configure, action, computed, set, runInAction } from 'mobx';
 import apiService from 'services/api.service';
 import { getCandidateScore } from 'helpers/score.helper';
 
 configure({ enforceActions: 'observed' });
 
+const defaultValidation = {
+  isValid: true,
+  validationErrors: {}
+};
+
 class CandidatesStore {
   @observable loading = false;
-  @observable newCandidate: any = {};
   @observable candidates: any[] = [];
+  @observable newCandidate: any = {};
+  @observable newCandidateValidation: any = defaultValidation;
   @observable errors: [] = [];
 
   @computed get submitedCount() {
@@ -20,13 +26,45 @@ class CandidatesStore {
   }
 
   @action.bound
+  validateNewCandidate() {
+    this.newCandidateValidation = defaultValidation;
+  }
+
+  @action.bound
   clearNewCandidate() {
     this.newCandidate = {};
+    this.newCandidateValidation = defaultValidation;
   }
 
   @action.bound
   handleChangeNewCandidate({ field, value }: { field: string; value: any }) {
     this.newCandidate[field] = value;
+    this.validateNewCandidate();
+  }
+
+  @action.bound
+  handleUploadCandidateAvatar(event: any) {
+    try {
+      const files = event.target.files || [];
+      if (files && files[0]) {
+        const file = files[0];
+        if (file.size >= 300000) {
+          set(this.newCandidateValidation.validationErrors, 'avatar', 'Image size is too large');
+          return;
+        }
+        const FR = new FileReader();
+        FR.addEventListener('load', (e: any) => {
+          runInAction(() => {
+            set(this.newCandidateValidation.validationErrors, 'avatar', null);
+            set(this.newCandidate, 'avatar', e.target.result);
+          });
+        }); 
+        
+        FR.readAsDataURL(file);
+      }
+    } catch (error) {
+      this.errors = error.errors;
+    }
   }
 
   serializeCandidates(candidates: any[]) {

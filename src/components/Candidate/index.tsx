@@ -105,7 +105,7 @@ const CandidateView = ({ candidate }: Props) => {
         <Avatar alt={fullName} src={avatar} className={S.Avatar} />
         <div className={S.InfoCol}>
           <Typography variant="h6">
-            {fullName}
+            {fullName || 'No name'}
           </Typography>
           <Typography variant="subtitle1">
             <a href={`mailto:${email}`}>
@@ -148,13 +148,13 @@ const CandidateView = ({ candidate }: Props) => {
 
       <div className={S.DataCol} style={{ flex: 1, justifyContent: 'flex-end' }}>
         <div className={S.StateBlock}>
-          <Chip label={state} className={stateClass} />
+          <Chip label={state} className={stateClass} onClick={handleOpenDialog} />
           <div className={S.AppliedOnRow}>
             <Typography variant="body1" className={S.AppliedOnLabel}>
               Applied on
             </Typography>
             <Typography variant="subtitle1">
-              {appliedOn}
+              {appliedOn.split(' ')[0]}
             </Typography>
           </div>
         </div>

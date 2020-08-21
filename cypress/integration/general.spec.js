@@ -97,7 +97,16 @@ context('Create filled candidate, update state, delete candidate', () => {
 
   before(() => {
     cy.visit('http://localhost:3000')
+    cy.clearLocalStorageCache();
   })
+
+  beforeEach(() => {
+    cy.restoreLocalStorageCache();
+  })
+  
+  afterEach(() => {
+    cy.saveLocalStorageCache();
+  });
 
   const randomStr = Math.random().toString(36).substr(2, 9);
   const candidate = {
@@ -170,5 +179,44 @@ context('Create filled candidate, update state, delete candidate', () => {
     cy.get('[data-cy="candidate"]')
       .find('[data-cy="candidate__score"]')
       .contains('100%')
+  })
+
+  it('Update Candidate State from Submitted to In Review', () => {
+    cy.get('[data-cy="candidate"]')
+      .find('[data-cy="candidate__state"]')
+      .contains('submitted')
+
+    cy.get('[data-cy="candidate"]')
+      .find('[data-cy="candidate__menu-btn"]')
+      .click()
+
+    cy.get('[data-cy="candidate__change-state-btn"]')
+      .click()
+
+    cy.get('[data-cy="candidate__state-select"]')
+      .click()
+
+    cy.get('[data-cy="candidate__state-select-option-in-review"]')
+      .click()
+
+    cy.get('[data-cy="candidate__update-state-btn"]')
+      .click()
+
+    cy.get('[data-cy="candidate"]')
+      .find('[data-cy="candidate__state"]')
+      .contains('in review')
+  })
+
+  it('Delete Candidate', () => {
+    cy.get('[data-cy="candidate"]')
+      .find('[data-cy="candidate__menu-btn"]')
+      .click()
+
+    cy.get('[data-cy="candidate__delete-btn"]')
+      .click()
+  })
+
+  it('Deleted Candidate should not be in list', () => {
+    cy.get('[data-cy="candidate"]').should('not.exist');
   })
 });

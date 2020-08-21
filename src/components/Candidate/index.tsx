@@ -154,7 +154,7 @@ const CandidateView = ({ candidate }: Props) => {
               Applied on
             </Typography>
             <Typography variant="subtitle1">
-              {appliedOn.split(' ')[0]}
+              {(appliedOn || '').split(' ')[0]}
             </Typography>
           </div>
         </div>
@@ -165,6 +165,7 @@ const CandidateView = ({ candidate }: Props) => {
           aria-controls="candidate-menu"
           aria-haspopup="true"
           onClick={handleOpenMenu}
+          data-cy="candidate__menu-btn"
         >
           <MoreHorizIcon />
         </Button>
@@ -176,11 +177,11 @@ const CandidateView = ({ candidate }: Props) => {
           open={Boolean(menuAnchorEl)}
           onClose={handleCloseMenu}
         >
-          <MenuItem onClick={handleChangeState} className={S.MenuItem}>
+          <MenuItem onClick={handleChangeState} className={S.MenuItem} data-cy="candidate__change-state-btn">
             <SettingsIcon />
             Change State
           </MenuItem>
-          <MenuItem onClick={handleDelete} className={S.MenuItem}>
+          <MenuItem onClick={handleDelete} className={S.MenuItem} data-cy="candidate__delete-btn">
             <DeleteIcon />
             Delete
           </MenuItem>
@@ -199,9 +200,10 @@ const CandidateView = ({ candidate }: Props) => {
                 id="state-select"
                 value={newState}
                 onChange={handleChangeNewState}
+                data-cy="candidate__state-select"
               >
                 {availableStates.map(({ label }) => (
-                  <MenuItem key={label} value={label} className={S.StateSelectOption}>
+                  <MenuItem key={label} value={label} className={S.StateSelectOption} data-cy={`candidate__state-select-option-${label.replace(' ', '-')}`}>
                     {label}
                   </MenuItem>
                 ))}
@@ -213,6 +215,7 @@ const CandidateView = ({ candidate }: Props) => {
               disabled={newState === state}
               onClick={handleUpdateState}
               className={S.DialogSaveBtn}
+              data-cy="candidate__update-state-btn"
             >
               Update State
             </Button>

@@ -58,6 +58,7 @@ class CandidatesStore {
       const files = event.target.files || [];
       if (files && files[0]) {
         const file = files[0];
+        console.log('!#! file', file)
         if (file.size >= 300000) {
           set(this.newCandidateValidation.validationErrors, 'avatar', 'Image size is too large');
           return;
@@ -67,6 +68,7 @@ class CandidatesStore {
           runInAction(() => {
             set(this.newCandidateValidation.validationErrors, 'avatar', null);
             set(this.newCandidate, 'avatar', e.target.result);
+            console.log('!#! avatar', e.target.result);
           });
         }); 
         

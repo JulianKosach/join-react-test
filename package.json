@@ -49,6 +49,7 @@
   },
   "devDependencies": {
     "cypress": "^5.0.0",
+    "cypress-file-upload": "^4.0.7",
     "husky": "^4.2.5"
   },
   "husky": {

@@ -1,3 +1,4 @@
+import 'cypress-file-upload';
 
 // ***********************************************
 // This example commands.js shows you how to
@@ -24,3 +25,5 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+// Cypress.LocalStorage.clear = function () { return; }

@@ -100,15 +100,15 @@ const CandidateView = ({ candidate }: Props) => {
   }, [state, S]);
 
   return (
-    <Paper elevation={1} className={S.Candidate}>
+    <Paper elevation={1} className={S.Candidate} data-cy="candidate" data-id={id}>
       <div className={S.DataCol} style={{ flex: 2 }}>
         <Avatar alt={fullName} src={avatar} className={S.Avatar} />
         <div className={S.InfoCol}>
-          <Typography variant="h6">
+          <Typography variant="h6" data-cy="candidate__fullName">
             {fullName || 'No name'}
           </Typography>
           <Typography variant="subtitle1">
-            <a href={`mailto:${email}`}>
+            <a href={`mailto:${email}`} data-cy="candidate__email">
               {email}
             </a>
           </Typography>
@@ -132,7 +132,7 @@ const CandidateView = ({ candidate }: Props) => {
             classes={{ circle: progressCircleClass }}
             color="inherit"
           />
-          <Typography variant="subtitle1" className={S.ProgressValue}>
+          <Typography variant="subtitle1" className={S.ProgressValue} data-cy="candidate__score">
             {scorePercentage}%
           </Typography>
         </div>
@@ -148,7 +148,7 @@ const CandidateView = ({ candidate }: Props) => {
 
       <div className={S.DataCol} style={{ flex: 1, justifyContent: 'flex-end' }}>
         <div className={S.StateBlock}>
-          <Chip label={state} className={stateClass} onClick={handleOpenDialog} />
+          <Chip label={state} className={stateClass} onClick={handleOpenDialog} data-cy="candidate__state" />
           <div className={S.AppliedOnRow}>
             <Typography variant="body1" className={S.AppliedOnLabel}>
               Applied on

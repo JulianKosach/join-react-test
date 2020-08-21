@@ -64,6 +64,7 @@ const ApplicantScreen = () => {
               id="avatar_upload"
               type="file"
               onChange={candidatesStore.handleUploadCandidateAvatar}
+              data-cy="application__avatar-field"
             />
             <label
               htmlFor="avatar_upload"
@@ -107,6 +108,7 @@ const ApplicantScreen = () => {
             onChange={handleChange}
             error={!!validationErrors.email}
             helperText={validationErrors.email}
+            data-cy="application__email-field"
           />
         </FormControl>
 
@@ -132,6 +134,7 @@ const ApplicantScreen = () => {
                 </InputAdornment>
               )
             }}
+            data-cy="application__password-field"
           />
         </FormControl>
 
@@ -145,6 +148,7 @@ const ApplicantScreen = () => {
             onChange={handleChange}
             error={!!validationErrors.fullName}
             helperText={validationErrors.fullName}
+            data-cy="application__fullName-field"
           />
         </FormControl>
 
@@ -158,6 +162,7 @@ const ApplicantScreen = () => {
             onChange={handleChange}
             error={!!validationErrors.phone}
             helperText={validationErrors.phone}
+            data-cy="application__phone-field"
           />
         </FormControl>
 
@@ -168,6 +173,7 @@ const ApplicantScreen = () => {
           onClick={handleApply}
           className={S.ApplyButton}
           disabled={!isValid}
+          data-cy="application__apply-btn"
         >
           Apply now for this job
         </Button>

@@ -1,12 +1,18 @@
 import { observable, flow, configure, action, computed, set, runInAction } from 'mobx';
 import apiService from 'services/api.service';
 import { getCandidateScore } from 'helpers/score.helper';
+import Validate from 'helpers/validation.helper';
 
 configure({ enforceActions: 'observed' });
 
 const defaultValidation = {
   isValid: true,
   validationErrors: {}
+};
+
+const fieldsToValidate = {
+  email: 'email',
+  password: 'password'
 };
 
 class CandidatesStore {
@@ -27,7 +33,11 @@ class CandidatesStore {
 
   @action.bound
   validateNewCandidate() {
-    this.newCandidateValidation = defaultValidation;
+    const { isValid, errors } = Validate(this.newCandidate, fieldsToValidate);
+    this.newCandidateValidation = {
+      isValid,
+      validationErrors: errors || {}
+    };
   }
 
   @action.bound
@@ -38,7 +48,7 @@ class CandidatesStore {
 
   @action.bound
   handleChangeNewCandidate({ field, value }: { field: string; value: any }) {
-    this.newCandidate[field] = value;
+    this.newCandidate[field] = value || null;
     this.validateNewCandidate();
   }
 

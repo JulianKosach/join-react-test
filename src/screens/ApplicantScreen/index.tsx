@@ -30,6 +30,7 @@ const ApplicantScreen = () => {
   const { candidatesStore } = stores;
   const { loading, newCandidate, newCandidateValidation } = candidatesStore;
   const { isValid, validationErrors } = newCandidateValidation;
+  const { fullName, avatar, email, password, phone } = newCandidate;
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (event: any) => {
@@ -53,8 +54,8 @@ const ApplicantScreen = () => {
         <div className={S.AvatarRow}>
           <div className={S.AvatarWrap}>
             <Avatar
-              alt={newCandidate.fullName}
-              src={newCandidate.avatar}
+              alt={fullName || ''}
+              src={avatar}
               className={S.Avatar}
             />
             <input
@@ -102,9 +103,9 @@ const ApplicantScreen = () => {
             label="Email"
             variant="outlined"
             name="email"
-            value={newCandidate.email}
+            value={email || ''}
             onChange={handleChange}
-            error={validationErrors.email}
+            error={!!validationErrors.email}
             helperText={validationErrors.email}
           />
         </FormControl>
@@ -115,9 +116,9 @@ const ApplicantScreen = () => {
             label="Password"
             variant="outlined"
             name="password"
-            value={newCandidate.password}
+            value={password || ''}
             onChange={handleChange}
-            error={validationErrors.password}
+            error={!!validationErrors.password}
             helperText={validationErrors.password}
             InputProps={{
               endAdornment: (
@@ -140,9 +141,9 @@ const ApplicantScreen = () => {
             label="Full Name"
             variant="outlined"
             name="fullName"
-            value={newCandidate.fullName}
+            value={fullName || ''}
             onChange={handleChange}
-            error={validationErrors.fullName}
+            error={!!validationErrors.fullName}
             helperText={validationErrors.fullName}
           />
         </FormControl>
@@ -153,9 +154,9 @@ const ApplicantScreen = () => {
             label="Phone number"
             variant="outlined"
             name="phone"
-            value={newCandidate.phone}
+            value={phone || ''}
             onChange={handleChange}
-            error={validationErrors.phone}
+            error={!!validationErrors.phone}
             helperText={validationErrors.phone}
           />
         </FormControl>

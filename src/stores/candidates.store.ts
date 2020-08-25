@@ -3,6 +3,8 @@ import apiService from 'services/api.service';
 import { getCandidateScore } from 'helpers/score.helper';
 import Validate from 'helpers/validation.helper';
 
+import Candidate from 'types/Candidate';
+
 configure({ enforceActions: 'observed' });
 
 const defaultValidation = {
@@ -18,12 +20,18 @@ const fieldsToValidate = {
 class CandidatesStore {
   @observable loading = false;
   @observable candidates: any[] = [];
-  @observable newCandidate: any = {};
+  @observable newCandidate: Candidate = {};
   @observable newCandidateValidation: any = defaultValidation;
   @observable errors: [] = [];
 
   @computed get submitedCount() {
     return this.candidates.filter(candidate => candidate.state === 'submitted').length;
+  }
+
+  getCandidateById(id: string) {
+    const idx = this.candidates.findIndex((candidate: Candidate) => candidate.id === id);
+    const candidate = this.candidates[idx];
+    return { candidate, idx };
   }
 
   @action.bound
@@ -47,7 +55,7 @@ class CandidatesStore {
   }
 
   @action.bound
-  handleChangeNewCandidate({ field, value }: { field: string; value: any }) {
+  handleChangeNewCandidate({ field, value }: { field: keyof Candidate; value: any }) {
     this.newCandidate[field] = value || null;
     this.validateNewCandidate();
   }
@@ -118,7 +126,7 @@ class CandidatesStore {
     this.loading = true;
     try {
       const { item } = yield apiService.updateCandidate(id, data);
-      const idx = this.candidates.findIndex((candidate: any) => candidate.id === id);
+      const { idx } = this.getCandidateById(id);
       if (idx !== -1) {
         const [serialized] = this.serializeCandidates([item]);
         set(this.candidates, idx, serialized);
@@ -132,11 +140,12 @@ class CandidatesStore {
     }
   })
 
-  deleteCandidate = flow(function* fetch(this: any, id: string) {
+  deleteCandidate = flow(function* fetch(this: any, id?: string) {
+    if (!id) return;
     this.loading = true;
     try {
       const { item } = yield apiService.deleteCandidate(id);
-      const idx = this.candidates.findIndex((candidate: any) => candidate.id === id);
+      const { idx } = this.getCandidateById(id);
       if (idx !== -1) this.candidates.splice(idx, 1);
       this.errors = [];
       this.loading = false;

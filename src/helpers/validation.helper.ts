@@ -21,14 +21,15 @@ const Validate = (data: {}, rules: any) => {
   });
 
   const errors = validate(data, validationRules, options);
+  
+  if (errors) {
+    Object.keys(errors).forEach(key => {
+      errors[key] = errors[key].toString();
+      errors[key]= errors[key].replace(', ', '\n ');
+    });
+  }
 
-  const result = errors && Object.keys(errors).map(key => {
-    errors[key] = errors[key].toString();
-    errors[key]= errors[key].replace(', ', '\n ');
-    return true;
-  });
-
-  return { isValid: !result, errors };
+  return { isValid: !errors, errors };
 };
 
 export default Validate;

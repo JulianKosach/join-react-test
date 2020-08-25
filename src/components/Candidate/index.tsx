@@ -32,10 +32,15 @@ const CandidateView = ({ candidate }: Props) => {
   const { candidatesStore } = stores;
   const { id, fullName, email, avatar, state, appliedOn, score = {} } = candidate;
   const { scorePercentage = 0, scoreTitle = '', scoreColor = '' } = score;
+  
   const [progressCircleClass, setProgressCircleClass] = useState(S.ProgressCircleError);
   const [stateClass, setStateClass] = useState(S.State);
-  const currentState = states.find(item => item.label === state);
-  const availableStates = states.filter(item => !(currentState && item.step !== currentState.step && item.step !== currentState.step + 1));
+
+  const currentState = states.find(item => item.label === state) || states[0];
+  const availableStates = states.filter(item => {
+    const stepDiff = item.step - currentState.step;
+    return stepDiff === 0 || stepDiff === 1;
+  });
 
   const [newState, setNewState] = useState(state);
   const [showDialog, setShowDialog] = useState(false);

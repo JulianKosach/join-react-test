@@ -36,14 +36,14 @@ export const useStyles = makeStyles((theme: any) => ({
     top: 0,
     left: 0,
   },
-  ProgressCircleError: {
-    stroke: '#d96865'
+  ProgressCircleOk: {
+    stroke: theme.palette.primary.main
   },
   ProgressCircleWarning: {
     stroke: '#f09451'
   },
-  ProgressCircleOk: {
-    stroke: theme.palette.primary.main
+  ProgressCircleError: {
+    stroke: '#d96865'
   },
   ProgressValue: {
     position: 'absolute',
@@ -69,17 +69,14 @@ export const useStyles = makeStyles((theme: any) => ({
     color: theme.palette.secondary.main,
   },
   StateHired: {
-    textTransform: 'uppercase',
     color: '#128d25',
     fontWeight: 'bold'
   },
   StateRejected: {
-    textTransform: 'uppercase',
     color: '#d96865',
     fontWeight: 'bold'
   },
   StateProgress: {
-    textTransform: 'uppercase',
     color: theme.palette.primary.main,
     fontWeight: 'bold'
   },

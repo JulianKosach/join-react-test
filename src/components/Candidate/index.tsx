@@ -20,6 +20,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import stores from 'stores';
 import { states } from 'helpers/state.helper';
 
+import clsx from 'clsx';
 import { useStyles } from './styles';
 
 import Candidate from 'types/Candidate';
@@ -32,9 +33,6 @@ const CandidateView = ({ candidate }: Props) => {
   const { candidatesStore } = stores;
   const { id, fullName, email, avatar, state, appliedOn, score = {} } = candidate;
   const { scorePercentage = 0, scoreTitle = '', scoreColor = '' } = score;
-  
-  const [progressCircleClass, setProgressCircleClass] = useState(S.ProgressCircleError);
-  const [stateClass, setStateClass] = useState(S.State);
 
   const currentState = states.find(item => item.label === state) || states[0];
   const availableStates = states.filter(item => {
@@ -78,32 +76,6 @@ const CandidateView = ({ candidate }: Props) => {
     candidatesStore.updateCandidate(id, { state: newState });
   };
 
-  useEffect(() => {
-    if (scoreColor === 'error') {
-      setProgressCircleClass(S.ProgressCircleError);
-    } else if (scoreColor === 'warn') {
-      setProgressCircleClass(S.ProgressCircleWarning);
-    } else {
-      setProgressCircleClass(S.ProgressCircleOk);
-    }
-  }, [scoreColor, S]);
-
-  useEffect(() => {
-    setNewState(state);
-  }, [state]);
-
-  useEffect(() => {
-    if (state === 'hired') {
-      setStateClass(S.StateHired);
-    } else if (state === 'not a fit') {
-      setStateClass(S.StateRejected);
-    } else if (state === 'in review') {
-      setStateClass(S.StateProgress);
-    } else {
-      setStateClass(S.State);
-    }
-  }, [state, S]);
-
   return (
     <Paper elevation={1} className={S.Candidate} data-cy="candidate" data-id={id}>
       <div className={S.DataCol} style={{ flex: 2 }}>
@@ -134,7 +106,12 @@ const CandidateView = ({ candidate }: Props) => {
             size={60}
             value={scorePercentage}
             className={S.Progress}
-            classes={{ circle: progressCircleClass }}
+            classes={{
+              circle: clsx(S.ProgressCircleOk, {
+                [S.ProgressCircleError]: scoreColor === 'error',
+                [S.ProgressCircleWarning]: scoreColor === 'warn',
+              })
+            }}
             color="inherit"
           />
           <Typography variant="subtitle1" className={S.ProgressValue} data-cy="candidate__score">
@@ -153,7 +130,16 @@ const CandidateView = ({ candidate }: Props) => {
 
       <div className={S.DataCol} style={{ flex: 1, justifyContent: 'flex-end' }}>
         <div className={S.StateBlock}>
-          <Chip label={state} className={stateClass} onClick={handleOpenDialog} data-cy="candidate__state" />
+          <Chip
+            label={state}
+            className={clsx(S.State, {
+              [S.StateHired]: state === 'hired',
+              [S.StateRejected]: state === 'not a fit',
+              [S.StateProgress]: state === 'in review',
+            })}
+            onClick={handleOpenDialog}
+            data-cy="candidate__state"
+          />
           <div className={S.AppliedOnRow}>
             <Typography variant="body1" className={S.AppliedOnLabel}>
               Applied on
